@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { envConfig } from "./config/envConfig.js";
 import connectDatabase from "./config/databaseConfig.js";
+import userRoute from "./routes/userRoute.js";
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.get("/", (req, res) => {
     message: "I am here",
   });
 });
+
+app.use("/api/user", userRoute);
 
 const port = envConfig.port || 5000;
 app.listen(port, () => {
