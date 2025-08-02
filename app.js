@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { envConfig } from "./config/envConfig.js";
 import connectDatabase from "./config/databaseConfig.js";
 import userRoute from "./routes/userRoute.js";
+import blogRoute from "./routes/blogRoute.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/user", userRoute);
+app.use("/api/blog", blogRoute);
 
 const port = envConfig.port || 5000;
 app.listen(port, () => {

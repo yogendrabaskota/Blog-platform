@@ -73,6 +73,13 @@ class UserController {
         .json({ message: "Something went wrong", error: err.message });
     }
   };
+  getAllUser = async (req, res) => {
+    const allUser = await User.find();
+    res.status(200).json({
+      message: "User fetched",
+      allUser,
+    });
+  };
 }
 
 export default new UserController();
