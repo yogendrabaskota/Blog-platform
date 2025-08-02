@@ -2,6 +2,7 @@ import express from "express";
 import { multer, storage } from "../middleware/multerMiddleware.js";
 import blogController from "../controllers/blogController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
+import catchAsync from "../middleware/catchAsync.js";
 const upload = multer({ storage: storage });
 
 const router = express.Router();
@@ -11,17 +12,17 @@ router
   .post(
     authMiddleware.isAuthenticated,
     upload.single("imageUrl"),
-    blogController.createBlog
+    catchAsync(blogController.createBlog)
   )
 
-  .get(blogController.getAllBlog);
+  .get(catchAsync(blogController.getAllBlog));
 router
   .route("/:id")
-  .get(blogController.getSingleBlog)
-  .delete(authMiddleware.isAuthenticated, blogController.deleteBlog)
+  .get(catchAsync(blogController.getSingleBlog))
+  .delete(authMiddleware.isAuthenticated, catchAsync(blogController.deleteBlog))
   .patch(
     authMiddleware.isAuthenticated,
     upload.single("imageUrl"),
-    blogController.updateBlog
+    catchAsync(blogController.updateBlog)
   );
 export default router;
