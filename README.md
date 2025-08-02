@@ -37,7 +37,7 @@ A RESTful API for managing blog posts with image upload support.
 ```http
 POST /api/blogs
 Content-Type: multipart/form-data
-Authorization: Bearer <token>
+Authorization: <token>
 
 {
   "title": "My First Blog",
@@ -45,7 +45,7 @@ Authorization: Bearer <token>
   "category": "Technology",
   "subtitle": "An introductory post"
 }
-+ File: image.jpg
++ File: imageUrl.jpg
 
 ```
 
@@ -99,7 +99,7 @@ LIVE_SERVER =
 
 ```json
 {
-  "base_url": "https://your-api-name.onrender.com/api",
+  "base_url": "https://blog-platform-r6gg.onrender.com//api",
   "auth_token": "{{your_jwt_token}}"
 }
 ```
@@ -131,6 +131,8 @@ PATCH /api/blog/:id
 DELETE /api/blog/:id
 GET /api/blog/:id
 ```
+
+### Backend is live at [Here](https://blog-platform-r6gg.onrender.com/)
 
 ## Feedback
 
