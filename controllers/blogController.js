@@ -75,6 +75,7 @@ class BlogController {
       data,
     });
   }
+
   async deleteBlog(req, res) {
     const id = req.params.id;
     const userId = req.user.id;
@@ -97,7 +98,6 @@ class BlogController {
       if (blog.imageUrl && process.env.LIVE_SERVER) {
         const lengthToCut = process.env.LIVE_SERVER.length;
 
-        // Only proceed if the image URL starts with LIVE_SERVER
         if (blog.imageUrl.startsWith(process.env.LIVE_SERVER)) {
           const finalFilePathAfterCut = blog.imageUrl.slice(lengthToCut);
 
@@ -119,6 +119,69 @@ class BlogController {
       return res.status(403).json({
         message: "You arenot the author",
       });
+    }
+  }
+  async updateBlog(req, res) {
+    try {
+      const id = req.params.id;
+      const { title, description, category, subtitle } = req.body;
+
+      if (!id) {
+        res.status(400).json({
+          message: "You are not loggedIn",
+        });
+        return;
+      }
+      if (!title || !description || !category || !subtitle) {
+        return res.status(400).json({
+          message: "Please provide all required fields",
+        });
+      }
+      const oldData = await Blog.findById(id);
+      console.log("old", oldData);
+      if (!oldData) {
+        return res.status(400).json({
+          message: "No data found with that id",
+        });
+      }
+      const oldProductImage = oldData.imageUrl;
+      const lengthToCut = process.env.LIVE_SERVER.length;
+      const finalFilePathAfteCut = oldProductImage.slice(lengthToCut);
+
+      if (req.file && req.file.filename) {
+        fs.unlink("./uploads/" + finalFilePathAfteCut, (err) => {
+          if (err) {
+            console.log("Error deleting FIle");
+          } else {
+            console.log("File deleted successfully");
+          }
+        });
+      }
+      const datas = await Blog.findByIdAndUpdate(
+        id,
+        {
+          title,
+          description,
+          category,
+          subtitle,
+          imageUrl:
+            req.file && req.file.filename
+              ? process.env.LIVE_SERVER + req.file.filename
+              : oldProductImage,
+        },
+        {
+          new: true,
+        }
+      );
+      res.status(200).json({
+        message: "Blog Updated successfully",
+        data: datas,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Internal server Error",
+      });
+      console.log("error", error);
     }
   }
 }

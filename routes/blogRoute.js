@@ -18,6 +18,10 @@ router
 router
   .route("/:id")
   .get(blogController.getSingleBlog)
-  .delete(authMiddleware.isAuthenticated, blogController.deleteBlog);
-
+  .delete(authMiddleware.isAuthenticated, blogController.deleteBlog)
+  .patch(
+    authMiddleware.isAuthenticated,
+    upload.single("imageUrl"),
+    blogController.updateBlog
+  );
 export default router;
